@@ -1,4 +1,6 @@
-
+from telegram import Update
+from telegram.ext import CommandHandler
+from pump_detector import detect_pump
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 import os
