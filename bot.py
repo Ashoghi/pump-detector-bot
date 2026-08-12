@@ -31,3 +31,36 @@ def main():
 
 if __name__ == "__main__":
     main()
+async def pump(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if len(context.args) == 0:
+        await update.message.reply_text(
+            "استفاده:\n/pump BTCUSDT"
+        )
+        return
+
+    symbol = context.args[0].upper()
+
+    try:
+        result = await detect_pump(symbol)
+
+        if result["is_pump"]:
+            text = (
+                f"🚀 پامپ شناسایی شد!\n\n"
+                f"نماد: {result['symbol']}\n"
+                f"رشد: {result['price_change']:.2f}%\n"
+                f"حجم: {result['volume']:.0f}"
+            )
+        else:
+            text = (
+                f"❌ پامپ مشاهده نشد.\n\n"
+                f"نماد: {result['symbol']}\n"
+                f"رشد: {result['price_change']:.2f}%\n"
+                f"حجم: {result['volume']:.0f}"
+            )
+
+        await update.message.reply_text(text)
+
+    except Exception as e:
+        await update.message.reply_text(f"خطا:\n{e}")
+    app.add_handler(CommandHandler("pump", pump))
